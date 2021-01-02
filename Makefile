@@ -1,5 +1,5 @@
-PROJECT = rabbitmq_message_timestamp
-PROJECT_DESCRIPTION = RabbitMQ Message Timestamp
+PROJECT = rabbitmq_message_timestamp_overwriter
+PROJECT_DESCRIPTION = RabbitMQ Message Timestamp Overwriter
 
 define PROJECT_APP_EXTRA_KEYS
 	{broker_version_requirements, ["3.7.0", "3.8.0"]}

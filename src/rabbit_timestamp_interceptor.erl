@@ -51,7 +51,7 @@ applies_to() ->
 
 %%----------------------------------------------------------------------------
 
-                                                % Do not overwrite an existing timestamp
+                                                %overwrites an existing timestamp
 set_content_timestamp(#content{properties = Props} = Content, _)
   when is_integer(Props#'P_basic'.timestamp) ->
     Content;
@@ -64,15 +64,10 @@ set_content_timestamp(#content{properties = Props} = Content, Timestamp)
                     properties_bin = none}.
 
 set_content_timestamp_millis(#content{properties = #'P_basic'{headers = Headers} = Props} = Content, TimestampMs) ->
-  case header(?TIMESTAMP_IN_MS, Headers) of
-    undefined ->
-      Content#content{
-        properties = Props#'P_basic'{headers = add_header(Headers, {?TIMESTAMP_IN_MS, long, TimestampMs})},
-        properties_bin = none
-       };
-    %% Do not overwrite an existing TIMESTAMP_IN_MS.
-    _ -> Content
-  end.
+  Content#content{
+    properties = Props#'P_basic'{headers = add_header(Headers, {?TIMESTAMP_IN_MS, long, TimestampMs})},
+    properties_bin = none
+  }.
 
 add_header(undefined, Header) -> [Header];
 add_header(Headers, Header) ->
