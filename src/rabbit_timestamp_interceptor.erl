@@ -64,6 +64,7 @@ set_content_timestamp(#content{properties = Props} = Content, Timestamp)
                     properties_bin = none}.
 
 set_content_timestamp_millis(#content{properties = #'P_basic'{headers = Headers} = Props} = Content, TimestampMs) ->
+  warn_if_header_contains_timestamp_in_ms(Headers),
   Content#content{
     properties = Props#'P_basic'{headers = add_header(Headers, {?TIMESTAMP_IN_MS, long, TimestampMs})},
     properties_bin = none
@@ -72,3 +73,9 @@ set_content_timestamp_millis(#content{properties = #'P_basic'{headers = Headers}
 add_header(undefined, Header) -> [Header];
 add_header(Headers, Header) ->
   lists:keystore(element(1, Header), 1, Headers, Header).
+
+warn_if_header_contains_timestamp_in_ms(Headers) ->
+  case header(?TIMESTAMP_IN_MS, Headers) of
+    Val ->
+      error_logger:warning_msg("timestamp_in_ms found in header with value ~p, it is going to be overwritten.~n", [Val])
+  end.
